@@ -1,0 +1,53 @@
+// Function to calculate Net Salary
+function calculateNetSalary(basicSalary, benefits) {
+    // KRA Tax Rates
+    const taxRates = {
+        "0-24,000": 10,
+        "24,001-40,000": 15,
+        "40,001-60,000": 20,
+        "60,001-87,000": 25,
+        "87,001+": 30
+    };
+
+     // NHIF and NSSF rates
+     const nhifRate = 1.5; // NHIF rate is 1.5%
+     const nssfRate = 6; // NSSF rate is 6%
+
+         // Calculate Gross Salary
+         const grossSalary = basicSalary + benefits;
+
+         // Calculate Tax (PAYE)
+         let tax = 0;
+         for (const range in taxRates) {
+            let [min, max] = range.split("-").map(Number);
+            if (grossSalary >= min && (grossSalary <= max || max === undefined)) {
+                tax = (taxRates[range] / 100) * grossSalary;
+                break;
+            }
+        }
+
+        // Calculate NHIF Deductions
+        const nhifDeductions = (nhifRate / 100) * basicSalary;
+
+        // Calculate NSSF Deductions
+        const nssfDeductions = (nssfRate / 100) * basicSalary;
+
+         // Calculate Net Salary
+         const netSalary = grossSalary - tax - nhifDeductions - nssfDeductions;
+
+         return {
+            grossSalary,
+            tax,
+            nhifDeductions,
+            nssfDeductions,
+            netSalary
+        };
+    }
+
+    // Example calculation
+    const result = calculateNetSalary(50000, 10000); // Basic Salary: 50,000, Benefits: 10,000
+
+    console.log(result);
+
+
+        
